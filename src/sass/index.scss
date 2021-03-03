@@ -1,0 +1,125 @@
+// Variables
+@import "variables.scss";
+
+body {
+  background-image: url('../images/movie_icon_light.svg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100vh;
+  font-family: Tahoma, sans-serif;
+}
+
+#content_container {
+  height: calc(100vh - 80px);
+  background: $white;
+  width: 70%;
+  margin: 0 auto;
+  position: relative;
+}
+
+#search_wrapper {
+  display: flex;
+  background-image: linear-gradient(to right, #fa6a23, #f55f23, #f05324, #eb4724, #e53a25);
+  height: 3.3em;
+  padding: 3% 3% 2%;
+}
+
+#search_bar__content {
+  display: flex;
+}
+
+#search_bar__content p {
+  color: $white;
+}
+
+#search_bar {
+  flex-grow: 1;
+  background-image: linear-gradient(to right, #fc854f, #f87c4f, #f4744f, #ef6b4f, #ea634f);
+}
+
+#search_bar:hover {
+  cursor: pointer;
+}
+
+#search_bar img,
+#input_container img {
+  width: 25px;
+  height: auto;
+  margin: 1.3% 1.3%;
+}
+
+#search_icon {
+  margin-left: 0.5%;
+  background-color: $white;
+  width: 50px;
+  position: relative;
+}
+
+#search_icon img {
+  width: 65%;
+  height: auto;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+#search_content {
+  background-color: $white;
+  width: 90%;
+  position: absolute;
+  top: 3%;
+  left: 7%;
+}
+
+#input_container {
+  height: 4rem;
+  width: 100%;
+  border-bottom: 1px solid $darker-grey;
+  display: flex;
+}
+
+#input_container input {
+  height: 60%;
+  width: 100%;
+  border: none;
+  padding: 0;
+  outline: none;
+  font-weight: bold;
+}
+
+#input_container__wrapper {
+  width: 100%;
+}
+
+#input_container__wrapper p {
+  margin: 0;
+}
+
+#movie_container {
+  box-shadow: 0 3px 7px 1px $light-grey;
+}
+
+ul#movie_container__ul {
+  list-style-type: none;
+  margin: 0;
+}
+
+li.movie_container__li {
+  padding: 2%;
+  cursor: pointer;
+}
+
+
+p.movie_container__li_bottom_title {
+  font-weight: bolder;
+  margin: 0;
+}
+
+p.movie_container__li_bottom_text,
+p.input_container__wrapper_text {
+  font-size: 0.722em;
+  color: $light-text;
+  margin: 0;
+}
