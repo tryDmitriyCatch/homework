@@ -1,5 +1,6 @@
 import React from 'react'
 import axios from 'axios'
+import { debounce } from 'debounce'
 import { endpoint } from '../config/client'
 import movieIconDark from '../images/movie_icon_dark.svg'
 import movieIconLight from '../images/movie_icon_light.svg'
@@ -34,20 +35,18 @@ export default class SearchComponent extends React.Component {
         if (query.length >= 3) {
             this.handleLoadingState()
 
-            setTimeout(() => {
-                axios
-                    .get(endpoint.getDataByQuery(query))
+            axios
+                .get(endpoint.getDataByQuery(query))
 
-                    .then((data) => {
-                        this.handleLoadingState()
-                        this.setState({
-                            list: data.data.results
-                        })
+                .then((data) => {
+                    this.handleLoadingState()
+                    this.setState({
+                        list: data.data.results
                     })
-                    .catch((error) => {
-                        return error
-                    })
-            }, 600)
+                })
+                .catch((error) => {
+                    return error
+                })
         } else if (query.length === 0) {
             this.setState({
                 displaySearch: false
@@ -98,7 +97,7 @@ export default class SearchComponent extends React.Component {
                                 <input
                                     type="text"
                                     id="search"
-                                    onChange={ this.getMovieDataByQuery }/>
+                                    onChange={ debounce(this.getMovieDataByQuery, 500) }/>
                                 <p className="input_container__wrapper_text">{ this.state.defaultText }</p>
                             </div>
                         </div>
