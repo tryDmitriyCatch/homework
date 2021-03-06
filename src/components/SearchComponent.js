@@ -2,6 +2,7 @@ import React from 'react'
 import axios from 'axios'
 import { debounce } from 'debounce'
 import { endpoint } from '../config/client'
+import { ENV_VARIABLES } from '../config/config'
 import movieIconDark from '../images/movie_icon_dark.svg'
 import movieIconLight from '../images/movie_icon_light.svg'
 import searchIcon from '../images/search.svg'
@@ -32,7 +33,7 @@ export default class SearchComponent extends React.Component {
     getMovieDataByQuery(event) {
         let query = event.target.value
 
-        if (query.length >= 3) {
+        if (query.length >= ENV_VARIABLES.DEFAULT_MIN_CHARACTER_COUNT) {
             this.handleLoadingState()
 
             axios
@@ -110,7 +111,7 @@ export default class SearchComponent extends React.Component {
                                 }
                                 { this.state.list.length > 0 &&
                                     !this.state.isLoading &&
-                                    this.state.list.slice(0, 8).map((title) => (
+                                    this.state.list.slice(0, ENV_VARIABLES.DEFAULT_SEARCH_COUNT).map((title) => (
                                         <li className="movie_container__li" key={ title.id } onClick={ () => this.handleMovieSelect(title.original_title) }>
                                         <p className="movie_container__li_bottom_title">{ title.original_title }</p>
                                         <p

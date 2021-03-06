@@ -1,0 +1,4 @@
+export const ENV_VARIABLES = {
+    'DEFAULT_SEARCH_COUNT': 8,
+    'DEFAULT_MIN_CHARACTER_COUNT': 3
+}

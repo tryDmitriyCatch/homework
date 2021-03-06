@@ -1,4 +1,4 @@
-const apiKey = '921baef6b23489c6ff4272b0a57c4ae3'
+const apiKey = 'YOUR_API_KEY'
 const hostUrl = 'https://api.themoviedb.org/3/search/movie?'
 
 export const endpoint = {
