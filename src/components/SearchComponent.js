@@ -2,10 +2,12 @@ import React from 'react'
 import axios from 'axios'
 import { debounce } from 'debounce'
 import { endpoint } from '../config/client'
-import { ENV_VARIABLES } from '../config/config'
+import { CONFIG } from '../config/config'
 import movieIconDark from '../images/movie_icon_dark.svg'
 import movieIconLight from '../images/movie_icon_light.svg'
 import searchIcon from '../images/search.svg'
+import Helper from './partials/Helper'
+import { getYearFromDateString } from '../config/utils'
 
 export default class SearchComponent extends React.Component {
     constructor(props) {
@@ -16,8 +18,9 @@ export default class SearchComponent extends React.Component {
             defaultFailureText: 'No records found',
             displaySearch: false,
             isLoading: false,
+            isSuccess: true,
             list: []
-        };
+        }
 
         this.getMovieDataByQuery = this.getMovieDataByQuery.bind(this)
         this.handleMovieSelect = this.handleMovieSelect.bind(this)
@@ -33,20 +36,24 @@ export default class SearchComponent extends React.Component {
     getMovieDataByQuery(event) {
         let query = event.target.value
 
-        if (query.length >= ENV_VARIABLES.DEFAULT_MIN_CHARACTER_COUNT) {
+        if (query.length >= CONFIG.DEFAULT_MIN_CHARACTER_COUNT) {
             this.handleLoadingState()
 
             axios
                 .get(endpoint.getDataByQuery(query))
-
                 .then((data) => {
                     this.handleLoadingState()
                     this.setState({
                         list: data.data.results
                     })
                 })
-                .catch((error) => {
-                    return error
+                .catch(() => {
+                    this.handleLoadingState()
+
+                    this.setState({
+                        isSuccess: false,
+                        list: []
+                    })
                 })
         } else if (query.length === 0) {
             this.setState({
@@ -62,11 +69,7 @@ export default class SearchComponent extends React.Component {
     handleLoadingState() {
         this.setState(prevState => ({
             isLoading: !prevState.isLoading
-        }));
-    }
-
-    getYearFromDateString(date) {
-        return (new Date(date)).getFullYear()
+        }))
     }
 
     handleMovieSelect(title) {
@@ -98,25 +101,26 @@ export default class SearchComponent extends React.Component {
                                 <input
                                     type="text"
                                     id="search"
-                                    onChange={ debounce(this.getMovieDataByQuery, 500) }/>
+                                    onChange={ debounce(this.getMovieDataByQuery, CONFIG.DEFAULT_DEBOUNCE_DELAY) }/>
                                 <p className="input_container__wrapper_text">{ this.state.defaultText }</p>
                             </div>
                         </div>
                         <div id="movie_container">
                             <ul id="movie_container__ul">
                                 { this.state.isLoading &&
-                                    <li className="movie_container__li">
-                                        <p>...Loading</p>
-                                    </li>
+                                    <Helper message="...Loading"/>
+                                }
+                                { !this.state.isLoading && !this.state.isSuccess &&
+                                    <Helper message="An error occured. Please try later"/>
                                 }
                                 { this.state.list.length > 0 &&
                                     !this.state.isLoading &&
-                                    this.state.list.slice(0, ENV_VARIABLES.DEFAULT_SEARCH_COUNT).map((title) => (
+                                    this.state.list.slice(0, CONFIG.DEFAULT_SEARCH_COUNT).map((title) => (
                                         <li className="movie_container__li" key={ title.id } onClick={ () => this.handleMovieSelect(title.original_title) }>
                                         <p className="movie_container__li_bottom_title">{ title.original_title }</p>
                                         <p
                                             className="movie_container__li_bottom_text">
-                                            { title.vote_average } Rating, { this.getYearFromDateString(title.release_date) }
+                                            { title.vote_average } Rating, { getYearFromDateString(title.release_date) }
                                         </p>
                                         </li>
                                     ))
